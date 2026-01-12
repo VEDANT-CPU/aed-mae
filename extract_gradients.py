@@ -41,11 +41,8 @@ def compute_gradients(data_root_folder, step, folder):
                                                         os.path.basename(img_path)))
 
 if __name__=="__main__":
-    root_folder_fd_gt = "C:\Users\VEDANT\Desktop\AED-MAE\aed-mae\Datasets\fd_gt"
-    root_folder_frames = "C:\Users\VEDANT\Desktop\AED-MAE\aed-mae\Datasets\frames"
-    #Processing for fd_gt dataset
-    compute_gradients(root_folder_fd_gt, 1, "train")
-    compute_gradients(root_folder_fd_gt, 1, "test")
+    #Use forward slashes in Windows path as python takes \character as some unicode
+    root_folder_frames = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/frames_data"
     #Processing for frames dataset
     compute_gradients(root_folder_frames, 1, "train")
     compute_gradients(root_folder_frames, 1, "test")
