@@ -8,7 +8,7 @@ def get_configs_avenue():
     config.mask_ratio = 0.5
     config.start_TS_epoch = 100
     config.masking_method = "random_masking"
-    config.output_dir = "experiments/avenue"  # the checkpoints will be loaded from here
+    config.output_dir = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/frames_data"  # the checkpoints will be loaded from here
     config.abnormal_score_func = ['L2', 'L2']
     config.grad_weighted_rec_loss = True
     config.model = "mae_cvt"
@@ -23,8 +23,8 @@ def get_configs_avenue():
 
     # Dataset parameters
     config.dataset = "avenue"
-    config.avenue_path = "/media/alin/ssd2/datasets/Avenue_Dataset/Avenue Dataset"
-    config.avenue_gt_path = "/media/alin/hdd/Transformer_Labels/Avenue_gt"
+    config.avenue_path = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/frames_data"
+    config.avenue_gt_path = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/fd_gt"
     config.percent_abnormal = 0.25
     config.input_3d = True
     config.device = "cuda"
@@ -37,18 +37,18 @@ def get_configs_avenue():
     return config
 
 
-def get_configs_shanghai():
-    config = ml_collections.ConfigDict()
-    config.batch_size = 100
-    config.epochs = 200
-    config.mask_ratio = 0.5
-    config.start_TS_epoch = 100
-    config.masking_method = "random_masking"
-    config.output_dir = "experiments/shanghai" # the checkpoints will be loaded from here
-    config.abnormal_score_func = 'L1'
-    config.grad_weighted_rec_loss = True
-    config.model = "mae_cvt"
-    config.input_size = (160, 320)
+#def get_configs_shanghai():
+#    config = ml_collections.ConfigDict()
+#    config.batch_size = 100
+#    config.epochs = 200
+#    config.mask_ratio = 0.5
+#    config.start_TS_epoch = 100
+#    config.masking_method = "random_masking"
+#    config.output_dir = "experiments/shanghai" # the checkpoints will be loaded from here
+#    config.abnormal_score_func = 'L1'
+#    config.grad_weighted_rec_loss = True
+#    config.model = "mae_cvt"
+#    config.input_size = (160, 320)
     config.norm_pix_loss = False
     config.use_only_masked_tokens_ab = False
     config.run_type = "train"

@@ -5,17 +5,19 @@ import os
 import time
 from pathlib import Path
 
-from timm.optim import optim_factory
-from timm.utils import NativeScaler
-from torch.utils.tensorboard import SummaryWriter
+from timm.optim._param_groups import param_groups_weight_decay
+from torch.optim.adamw import AdamW
+from timm.utils.cuda import NativeScaler
+from torch.utils.tensorboard import SummaryWriter # type: ignore
 
-from configs.configs import get_configs_avenue, get_configs_shanghai
+from configs.configs import get_configs_avenue
 from data.test_dataset import AbnormalDatasetGradientsTest
 from data.train_dataset import AbnormalDatasetGradientsTrain
 from engine_train import train_one_epoch, test_one_epoch
 from inference import inference
 from model.model_factory import mae_cvt_patch16, mae_cvt_patch8
 from util import misc
+from torch.utils.data import RandomSampler, DataLoader
 import torch
 
 def main(args):
@@ -27,8 +29,8 @@ def main(args):
     if args.run_type =='train':
         dataset_train = AbnormalDatasetGradientsTrain(args)
         print(dataset_train)
-        sampler_train = torch.utils.data.RandomSampler(dataset_train)
-        data_loader_train = torch.utils.data.DataLoader(
+        sampler_train = RandomSampler(dataset_train)
+        data_loader_train = DataLoader(
             dataset_train, sampler=sampler_train,
             batch_size=args.batch_size,
             num_workers=args.num_workers,
@@ -38,7 +40,7 @@ def main(args):
 
     dataset_test = AbnormalDatasetGradientsTest(args)
     print(dataset_test)
-    data_loader_test = torch.utils.data.DataLoader(
+    data_loader_test = DataLoader(
         dataset_test, batch_size=args.batch_size, num_workers=args.num_workers,
         pin_memory=args.pin_mem, drop_last=False,
     )
@@ -74,8 +76,8 @@ def main(args):
 def do_training(args, data_loader_test, data_loader_train, device, log_writer, model):
     print("actual lr: %.2e" % args.lr)
     # following timm: set wd as 0 for bias and norm layers
-    param_groups = optim_factory.param_groups_weight_decay(model, args.weight_decay)
-    optimizer = torch.optim.AdamW(param_groups, lr=args.lr, betas=(0.9, 0.95))
+    param_groups = param_groups_weight_decay(model, args.weight_decay)
+    optimizer = AdamW(param_groups, lr=args.lr, betas=(0.9, 0.95))
     print(optimizer)
     loss_scaler = NativeScaler()
     misc.load_model(args=args, model=model, optimizer=optimizer, loss_scaler=loss_scaler)
@@ -129,8 +131,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.dataset == 'avenue':
         args = get_configs_avenue()
-    else:
-        args = get_configs_shanghai()#
     if args.output_dir:
-        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True) # type: ignore
     main(args)
