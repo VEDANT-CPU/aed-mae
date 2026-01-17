@@ -23,8 +23,8 @@ def get_configs_avenue():
 
     # Dataset parameters
     config.dataset = "avenue"
-    config.avenue_path = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/frames_data"
-    config.avenue_gt_path = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/fd_gt"
+    config.avenue_path = "/content/drive/MyDrive/Colab Notebooks/aed-mae/Datasets/frames_data"
+    config.avenue_gt_path = "/content/drive/MyDrive/Colab Notebooks/aed-mae/Datasets/fd_gt"
     config.percent_abnormal = 0.25
     config.input_3d = True
     config.device = "cuda"
