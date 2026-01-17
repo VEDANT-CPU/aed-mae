@@ -37,7 +37,7 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
         for dir in dirs:
             imgs_path = list(glob.glob(os.path.join(dir, f"*{extension}")))
             imgs_path = sorted(imgs_path, key=lambda x: int(os.path.basename(x).split('.')[0]))
-            lbls = np.loadtxt(os.path.join(gt_path, f"{os.path.basename(dir)}.npy"))
+            lbls = np.load(os.path.join(gt_path, f"{os.path.basename(dir)}.npy"))
 
             data += imgs_path
             labels += list(lbls)
