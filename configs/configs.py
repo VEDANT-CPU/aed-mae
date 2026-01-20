@@ -8,7 +8,7 @@ def get_configs_avenue():
     config.mask_ratio = 0.5
     config.start_TS_epoch = 100
     config.masking_method = "random_masking"
-    config.output_dir = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/results_r1"  # the checkpoints will be loaded from here
+    config.output_dir = "/content/drive/MyDrive/Colab Notebooks/aed-mae/Datasets/results_r1"  # the checkpoints will be loaded from here
     config.abnormal_score_func = ['L2', 'L2']
     config.grad_weighted_rec_loss = True
     config.model = "mae_cvt"
@@ -23,9 +23,9 @@ def get_configs_avenue():
 
     # Dataset parameters
     config.dataset = "avenue"
-    config.avenue_path = "/content/drive/MyDrive/Colab Notebooks/aed-mae/Datasets/frames_data"
-    config.avenue_gt_path = "/content/drive/MyDrive/Colab Notebooks/aed-mae/Datasets/fd_gt"
-    config.percent_abnormal = 0.25
+    config.avenue_path = "/content/frames_data"
+    config.avenue_gt_path = "/content/fd_gt"
+    config.percent_abnormal = 0.0 #0 means ignore the abnormal folders.
     config.input_3d = True
     config.device = "cuda"
 

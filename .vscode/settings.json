@@ -1,5 +1,7 @@
 {
-    "workbench.colorTheme": "Quiet Light",
+    "workbench.colorTheme": "Monokai Dimmed",
     "zenMode.restore": false,
-    "zenMode.fullScreen": false
+    "zenMode.fullScreen": false,
+    "workbench.preferredHighContrastLightColorTheme": "Monokai Dimmed",
+    "workbench.preferredLightColorTheme": "Monokai Dimmed"
 }
