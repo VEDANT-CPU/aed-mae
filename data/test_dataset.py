@@ -35,17 +35,20 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
         self.extension = extension
         dirs = list(glob.glob(os.path.join(data_path, "test", "*")))
         for dir in dirs:
-            imgs_path = list(glob.glob(os.path.join(dir, f"*{extension}")))
-            imgs_path = sorted(imgs_path, key=lambda x: int(os.path.basename(x).split('_')[-1].split('.')[0]))
-            lbls = np.load(os.path.join(gt_path, f"{os.path.basename(dir)}.npy"))
+            if "gradients2" not in os.path.basename(dir):
+                imgs_path = list(glob.glob(os.path.join(dir, f"*{extension}")))
+                imgs_path = sorted(imgs_path, key=lambda x: int(os.path.basename(x).split('_')[-1].split('.')[0]))
+                lbls = np.load(os.path.join(gt_path, f"{os.path.basename(dir)}.npy"))
 
-            data += imgs_path
-            labels += list(lbls)
+                data += imgs_path
+                labels += list(lbls)
 
-            video_name = os.path.basename(dir)
-            gradients_path = list(glob.glob(os.path.join(data_path, "test", "gradients2", video_name, "*.jpg")))
-            gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('_')[-1])
-            gradients += gradients_path
+                video_name = os.path.basename(dir)
+                gradients_path = list(glob.glob(os.path.join(data_path, "test", "gradients2", video_name, "*.jpg")))
+                gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('_')[-1])
+                gradients += gradients_path
+            else:
+                continue
         return data, labels, gradients
 
     def __getitem__(self, index):

@@ -1,5 +1,19 @@
 /nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
   warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+[ WARN:0@881.613] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/0000001.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.613] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/0000001.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.614] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/00000065.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.614] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/00000033.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.614] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/00000065.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.614] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/00000033.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.619] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/00000097.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.619] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/00000097.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.620] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/000000129.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.620] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/000000161.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.620] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/000000129.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.621] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/4_11/000000161.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.622] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/7_01/0000001.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.622] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/7_01/0000001.jpg'): can't open/read file: check file path/integrity
 Traceback (most recent call last):
   File "/nfs_home/users/poonam/vedant_project_folder/aed-mae/main.py", line 136, in <module>
     main(args)
@@ -9,6 +23,29 @@ Traceback (most recent call last):
     test_stats = test_one_epoch(
   File "/nfs_home/users/poonam/vedant_project_folder/aed-mae/engine_train.py", line 74, in test_one_epoch
     for data_iter_step, (samples, grads, targets, label, vid, _) in enumerate(metric_logger.log_every(data_loader, args.print_freq, header)):
-  File "/nfs_home/users/poonam/vedant_project_folder/aed-mae/util/misc.py", line 167, in log_every
-    header, total_time_str, total_time / len(iterable)))
-ZeroDivisionError: float division by zero
+  File "/nfs_home/users/poonam/vedant_project_folder/aed-mae/util/misc.py", line 144, in log_every
+    for obj in iterable:
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 708, in __next__
+    data = self._next_data()
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1480, in _next_data
+    return self._process_data(data)
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1505, in _process_data
+    data.reraise()
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/_utils.py", line 733, in reraise
+    raise exception
+ValueError: Caught ValueError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs_home/users/poonam/.conda/envs/pytorch_gpu/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs_home/users/poonam/vedant_project_folder/aed-mae/data/test_dataset.py", line 61, in __getitem__
+    img = np.concatenate([previous_img, current_img, next_img], axis=-1)
+ValueError: zero-dimensional arrays cannot be concatenated
+
+[ WARN:0@881.623] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/7_01/00000065.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.624] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/7_01/00000065.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.625] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/7_01/00000033.jpg'): can't open/read file: check file path/integrity
+[ WARN:0@881.625] global loadsave.cpp:278 findDecoder imread_('/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames/test/7_01/00000033.jpg'): can't open/read file: check file path/integrity
