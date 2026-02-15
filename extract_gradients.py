@@ -11,14 +11,16 @@ IMG_EXTENSIONS = [".png", ".jpg", ".jpeg", ".tif"]
 def compute_gradients(data_root_folder, step, folder):
     extension = None
     for ext in IMG_EXTENSIONS:
-        if len(list(glob.glob(os.path.join(data_root_folder, f"{folder}/frames", f"*/*{ext}")))) > 0:
+        if len(list(glob.glob(os.path.join(data_root_folder, f"{folder}", f"*/*{ext}")))) > 0:
             extension = ext
             break
 
-    dirs = list(glob.glob(os.path.join(data_root_folder, folder, "frames", "*")))
+    dirs = list(glob.glob(os.path.join(data_root_folder, folder, "*")))
     for video in tqdm(dirs):
         img_paths = list(glob.glob(os.path.join(video, f"*{extension}")))
-        img_paths = sorted(img_paths, key=lambda x: int(os.path.basename(x).split('.')[0]))
+        img_paths = sorted(img_paths, key=lambda x: int(os.path.basename(x).split('_')[-1].split('.')[0]))
+        #we use -1 in the split at underscore at negative indexing starts at end with -1
+        # 1 would also work but if names updated to cam_image_0001.jpg then we need last ie 0001
         for i, img_path in enumerate(img_paths):
             previous = i-step
             if i-step <0:
@@ -42,7 +44,7 @@ def compute_gradients(data_root_folder, step, folder):
 
 if __name__=="__main__":
     #Use forward slashes in Windows path as python takes \character as some unicode
-    root_folder_frames = "C:/Users/VEDANT/Desktop/AED-MAE/aed-mae/Datasets/frames_data"
+    root_folder_frames = "/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames"
     #Processing for frames dataset
     compute_gradients(root_folder_frames, 1, "train")
     compute_gradients(root_folder_frames, 1, "test")

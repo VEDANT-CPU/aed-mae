@@ -30,23 +30,23 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
         masks_abnormal = []
         extension = None
         for ext in IMG_EXTENSIONS:
-            if len(list(glob.glob(os.path.join(data_path, "train/frames", f"*/*{ext}")))) > 0:
+            if len(list(glob.glob(os.path.join(data_path, "train", f"*/*{ext}")))) > 0:
                 extension = ext
                 break
 
-        dirs = list(glob.glob(os.path.join(data_path, "train", "frames", "*")))
+        dirs = list(glob.glob(os.path.join(data_path, "train", "*")))#dir goes upto videos inside train & test
         for dir in dirs:
             imgs_path = list(glob.glob(os.path.join(dir, f"*{extension}")))
-            data += imgs_path
+            data += imgs_path# += op on a list adds to the end all the items of the RHS list
             video_name = os.path.basename(dir)
             gradients_path = []
             for img_path in imgs_path:
                 gradients_path.append(os.path.join(data_path, "train", "gradients2", video_name,
-                                              f"{int(os.path.basename(img_path).split('.')[0])}.png"))
+                                              f"{os.path.basename(img_path).split('.')[0]}.jpg"))
                 abnormal_data.append(os.path.join(data_path, "train", "frames_abnormal", video_name,
-                                                  f"{int(os.path.basename(img_path).split('.')[0])}.png"))
+                                                  f"{os.path.basename(img_path).split('.')[0]}.jpg"))
                 masks_abnormal.append(os.path.join(data_path, "train", "masks_abnormal", video_name,
-                                                  f"{int(os.path.basename(img_path).split('.')[0])}.png"))
+                                                  f"{os.path.basename(img_path).split('.')[0]}.jpg"))
             gradients += gradients_path
         return abnormal_data, data, gradients, masks_abnormal
 
@@ -56,11 +56,12 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
             img = cv2.imread(self.abnormal_data[index])
             # img = cv2.resize(img, self.args.usual_size[::-1])
             dir_path, frame_no, len_frame_no = self.extract_meta_info(self.abnormal_data, index)
-            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=-3, length=len_frame_no)
+            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=-3, length=len_frame_no)
             # previous_img = cv2.resize(previous_img, self.args.usual_size[::-1])
-            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=3, length=len_frame_no)
+            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=3, length=len_frame_no)
             # next_img = cv2.resize(next_img, self.args.usual_size[::-1])
             if self.input_3d:
+                print(f"Pervious: {type(previous_img)}, Current: {type(img)}, Next: {type(next_img)}")
                 img = np.concatenate([previous_img, img, next_img], axis=-1)
             mask = cv2.imread(self.masks_abnormal[index])[:,:,:1]
             # mask = cv2.resize(mask, self.args.usual_size[::-1])
@@ -68,8 +69,8 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
         else:
             img = cv2.imread(self.data[index])
             dir_path, frame_no, len_frame_no = self.extract_meta_info(self.data, index)
-            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=-3, length=len_frame_no)
-            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=3, length=len_frame_no)
+            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=-3, length=len_frame_no)
+            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=3, length=len_frame_no)
             if self.input_3d:
                 img = np.concatenate([previous_img, img, next_img], axis=-1)
             mask = np.zeros((img.shape[0],img.shape[1],1),dtype=np.uint8)
@@ -87,26 +88,31 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
         target = np.concatenate((target, mask), axis=-1)
         img = img.astype(np.float32)
         gradient = gradient.astype(np.float32)
+        gradient += 1e-6
         target = target.astype(np.float32)
         img = (img - 127.5) / 127.5
         img = np.swapaxes(img, 0, -1).swapaxes(1, -1)
         target = (target - 127.5) / 127.5
         target = np.swapaxes(target, 0, -1).swapaxes(1, -1)
         gradient = np.swapaxes(gradient, 0, 1).swapaxes(0, -1)
+        if np.max(gradient) == 0:
+            print(f"Warning: Gradient for index {self.gradients[index]} is all Zeros")
         return img, gradient, target
 
     def extract_meta_info(self, data, index):
-        frame_no = int(data[index].split("/")[-1].split('.')[0])
+        frame_no = int(data[index].split("/")[-1].split('.')[0].split('_')[-1])#Check this expression whenever using a new Dataset.
         dir_path = "/".join(data[index].split("/")[:-1])
         len_frame_no = len(data[index].split("/")[-1].split('.')[0])
         return dir_path, frame_no, len_frame_no
 
-    def read_prev_next_frame_if_exists(self, dir_path, frame_no, direction=-3, length=1):
-        frame_path = dir_path + "/" + str(frame_no + direction).zfill(length) + ".png"
+    def read_prev_next_frame_if_exists(self, dir_path, frame_no, fallback, direction=-3, length=1):
+        frame_path = dir_path + "/" + str(frame_no + direction).zfill(length) + ".jpg"
         if os.path.exists(frame_path):
-            return cv2.imread(frame_path)
+            ret_img = cv2.imread(frame_path)
+            if ret_img is not None:
+                return ret_img
         else:
-            return cv2.imread(dir_path + "/" + str(frame_no).zfill(length) + ".png")
+            return fallback
 
     def __len__(self):
         return len(self.data)

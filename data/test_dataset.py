@@ -36,15 +36,15 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
         dirs = list(glob.glob(os.path.join(data_path, "test", "frames", "*")))
         for dir in dirs:
             imgs_path = list(glob.glob(os.path.join(dir, f"*{extension}")))
-            imgs_path = sorted(imgs_path, key=lambda x: int(os.path.basename(x).split('.')[0]))
+            imgs_path = sorted(imgs_path, key=lambda x: int(os.path.basename(x).split('_')[-1].split('.')[0]))
             lbls = np.load(os.path.join(gt_path, f"{os.path.basename(dir)}.npy"))
 
             data += imgs_path
             labels += list(lbls)
 
             video_name = os.path.basename(dir)
-            gradients_path = list(glob.glob(os.path.join(data_path, "test", "gradients2", video_name, "*.png")))
-            gradients_path = sorted(gradients_path, key=lambda x: int(os.path.basename(x).split('.')[0]))
+            gradients_path = list(glob.glob(os.path.join(data_path, "test", "gradients2", video_name, "*.jpg")))
+            gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('.')[0])
             gradients += gradients_path
         return data, labels, gradients
 
@@ -76,7 +76,7 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
 
 
     def extract_meta_info(self, data, index):
-        frame_no = int(data[index].split("/")[-1].split('.')[0])
+        frame_no = int(data[index].split("/")[-1].split('.')[0].split('_')[-1])
         dir_path = "/".join(data[index].split("/")[:-1])
         len_frame_no = len(data[index].split("/")[-1].split('.')[0])
         return dir_path, frame_no, len_frame_no

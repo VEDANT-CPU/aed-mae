@@ -1,0 +1,67 @@
+=== GPU Job Started ===
+Job ID: 2992
+GPU allocated: 0
+Python: /nfs_home/users/poonam/.conda/envs/pytorch_gpu/bin/python
+job dir: /nfs_home/users/poonam/vedant_project_folder/aed-mae
+abnormal_score_func:
+- L2
+- L2
+avenue_gt_path: /nfs_home/users/poonam/divya/anomaly_datasets/tvad/gt_framelevel
+avenue_path: /nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames
+batch_size: 32
+dataset: avenue
+device: cuda
+epochs: 50
+eval_freq: 5
+grad_weighted_rec_loss: true
+input_3d: true
+input_size: !!python/tuple
+- 320
+- 640
+lr: 1.0e-05
+mask_ratio: 0.5
+masking_method: random_masking
+model: mae_cvt
+norm_pix_loss: false
+num_workers: 4
+output_dir: /nfs_home/users/poonam/vedant_project_dataset/aed-mae/results_r1
+percent_abnormal: 0.0
+pin_mem: false
+print_freq: 1
+resume: false
+run_type: train
+start_TS_epoch: 100
+start_epoch: 0
+use_only_masked_tokens_ab: false
+weight_decay: 0.05
+
+AbnormalDatasetGradientsTrain
+AbnormalDatasetGradientsTest
+actual lr: 1.00e-05
+AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.95)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 1e-05
+    maximize: False
+    weight_decay: 0.0
+
+Parameter Group 1
+    amsgrad: False
+    betas: (0.9, 0.95)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 1e-05
+    maximize: False
+    weight_decay: 0.05
+)
+Start training for 50 epochs
+log_dir: /nfs_home/users/poonam/vedant_project_dataset/aed-mae/results_r1
