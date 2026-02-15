@@ -29,11 +29,11 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
 
         extension = None
         for ext in IMG_EXTENSIONS:
-            if len(list(glob.glob(os.path.join(data_path, "test/frames", f"*/*{ext}")))) > 0:
+            if len(list(glob.glob(os.path.join(data_path, "test", f"*/*{ext}")))) > 0:
                 extension = ext
                 break
         self.extension = extension
-        dirs = list(glob.glob(os.path.join(data_path, "test", "frames", "*")))
+        dirs = list(glob.glob(os.path.join(data_path, "test", "*")))
         for dir in dirs:
             imgs_path = list(glob.glob(os.path.join(dir, f"*{extension}")))
             imgs_path = sorted(imgs_path, key=lambda x: int(os.path.basename(x).split('_')[-1].split('.')[0]))
@@ -44,7 +44,7 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
 
             video_name = os.path.basename(dir)
             gradients_path = list(glob.glob(os.path.join(data_path, "test", "gradients2", video_name, "*.jpg")))
-            gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('.')[0])
+            gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('_')[-1])
             gradients += gradients_path
         return data, labels, gradients
 
