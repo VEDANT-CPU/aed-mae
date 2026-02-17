@@ -53,9 +53,9 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         current_img = cv2.imread(self.data[index])
-        dir_path, frame_no, len_frame_no = self.extract_meta_info(self.data, index)
-        previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=-3, length=len_frame_no)
-        next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=3, length=len_frame_no)
+        dir_path, frame_no, length = self.extract_meta_info(self.data, index)
+        previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=-3)
+        next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, direction=3)
         img = current_img
         if self.input_3d:
             img = np.concatenate([previous_img, current_img, next_img], axis=-1)
@@ -84,7 +84,7 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
         len_frame_no = len(data[index].split("/")[-1].split('.')[0])
         return dir_path, frame_no, len_frame_no
 
-    def read_prev_next_frame_if_exists(self, dir_path, frame_no, direction=-3, length=3):
+    def read_prev_next_frame_if_exists(self, dir_path, frame_no, direction=-3):
         #frame_path = dir_path + "/" + "frame_" + str(frame_no + direction) + self.extension
         target_frame = "frame_" + str(frame_no + direction) + self.extension
         frame_path = os.path.join(dir_path, target_frame)
@@ -92,7 +92,7 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
             return cv2.imread(frame_path)
         else:
             current_frame = "frame_" + str(frame_no) + self.extension
-            return cv2.imread(dir_path + "/" + "frame_" + str(frame_no).zfill(length) + self.extension)
+            return cv2.imread(os.path.join(dir_path, current_frame))
 
     def __len__(self):
         return len(self.data)

@@ -56,9 +56,9 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
             img = cv2.imread(self.abnormal_data[index])
             # img = cv2.resize(img, self.args.usual_size[::-1])
             dir_path, frame_no, len_frame_no = self.extract_meta_info(self.abnormal_data, index)
-            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=-3, length=len_frame_no)
+            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=-3)
             # previous_img = cv2.resize(previous_img, self.args.usual_size[::-1])
-            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=3, length=len_frame_no)
+            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=3)
             # next_img = cv2.resize(next_img, self.args.usual_size[::-1])
             if self.input_3d:
                 print(f"Pervious: {type(previous_img)}, Current: {type(img)}, Next: {type(next_img)}")
@@ -69,8 +69,8 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
         else:
             img = cv2.imread(self.data[index])
             dir_path, frame_no, len_frame_no = self.extract_meta_info(self.data, index)
-            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=-3, length=len_frame_no)
-            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=3, length=len_frame_no)
+            previous_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=-3)
+            next_img = self.read_prev_next_frame_if_exists(dir_path, frame_no, img, direction=3)
             if self.input_3d:
                 img = np.concatenate([previous_img, img, next_img], axis=-1)
             mask = np.zeros((img.shape[0],img.shape[1],1),dtype=np.uint8)
@@ -105,8 +105,8 @@ class AbnormalDatasetGradientsTrain(torch.utils.data.Dataset):
         len_frame_no = len(data[index].split("/")[-1].split('.')[0])
         return dir_path, frame_no, len_frame_no
 
-    def read_prev_next_frame_if_exists(self, dir_path, frame_no, fallback, direction=-3, length=1):
-        frame_path = dir_path + "/" + str(frame_no + direction).zfill(length) + ".jpg"
+    def read_prev_next_frame_if_exists(self, dir_path, frame_no, fallback, direction=-3):
+        frame_path = dir_path + "/" + "frame_" + str(frame_no + direction) + ".jpg"
         if os.path.exists(frame_path):
             ret_img = cv2.imread(frame_path)
             if ret_img is not None:
