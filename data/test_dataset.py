@@ -45,7 +45,7 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
 
                 video_name = os.path.basename(dir)
                 gradients_path = list(glob.glob(os.path.join(data_path, "test", "gradients2", video_name, "*.jpg")))
-                gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('_')[-1])
+                gradients_path = sorted(gradients_path, key=lambda x: os.path.basename(x).split('_')[-1].split('.')[0])
                 gradients += gradients_path
             else:
                 continue
@@ -84,12 +84,15 @@ class AbnormalDatasetGradientsTest(torch.utils.data.Dataset):
         len_frame_no = len(data[index].split("/")[-1].split('.')[0])
         return dir_path, frame_no, len_frame_no
 
-    def read_prev_next_frame_if_exists(self, dir_path, frame_no, direction=-3, length=1):
-        frame_path = dir_path + "/" + str(frame_no + direction).zfill(length) + self.extension
+    def read_prev_next_frame_if_exists(self, dir_path, frame_no, direction=-3, length=3):
+        #frame_path = dir_path + "/" + "frame_" + str(frame_no + direction) + self.extension
+        target_frame = "frame_" + str(frame_no + direction) + self.extension
+        frame_path = os.path.join(dir_path, target_frame)
         if os.path.exists(frame_path):
             return cv2.imread(frame_path)
         else:
-            return cv2.imread(dir_path + "/" + str(frame_no).zfill(length) + self.extension)
+            current_frame = "frame_" + str(frame_no) + self.extension
+            return cv2.imread(dir_path + "/" + "frame_" + str(frame_no).zfill(length) + self.extension)
 
     def __len__(self):
         return len(self.data)
