@@ -44,7 +44,7 @@ def compute_gradients(data_root_folder, step, folder):
 
 if __name__=="__main__":
     #Use forward slashes in Windows path as python takes \character as some unicode
-    root_folder_frames = "/nfs_home/users/poonam/divya/anomaly_datasets/tvad/frames"
+    root_folder_frames = "/nfs_home/users/poonam/divya/anomaly_datasets/fall_detect/frames"
     #Processing for frames dataset
     compute_gradients(root_folder_frames, 1, "train")
     compute_gradients(root_folder_frames, 1, "test")
