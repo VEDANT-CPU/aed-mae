@@ -17,8 +17,8 @@ def get_configs_avenue():
     config.norm_pix_loss = False
     config.use_only_masked_tokens_ab = False
     config.run_type = 'train'
-    #config.resume = "/nfs_home/users/poonam/vedant_project_dataset/aed-mae/results_r1/checkpoint-latest.pth"
-    config.resume = False
+    config.resume = "/nfs_home/users/poonam/vedant_project_dataset/aed-mae/results_r1/checkpoint-latest.pth"
+    #config.resume = False
     # Optimizer parameters
     config.weight_decay = 0.05
     config.lr = 1e-5
